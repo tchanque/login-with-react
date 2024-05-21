@@ -5,7 +5,7 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "./api/axios";
+import axios from "../api/axios";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -24,7 +24,7 @@ function Register() {
   const [userFocus, setUserFocus] = useState(false);
 
   const [email, setEmail] = useState("");
-  const [validEmail, setValidEmail] = useState(false); 
+  const [validEmail, setValidEmail] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
 
   const [pwd, setPwd] = useState("");
@@ -53,8 +53,8 @@ function Register() {
 
   useEffect(() => {
     const result = EMAIL_REGEX.test(email);
-    setValidEmail(result)
-  }, [email])
+    setValidEmail(result);
+  }, [email]);
 
   useEffect(() => {
     const result = PWD_REGEX.test(pwd);
@@ -78,28 +78,28 @@ function Register() {
       setErrMsg("Invalid Entry");
       return;
     }
-    console.log("credentials have passed the check")
+    console.log("credentials have passed the check");
     try {
       const response = await axios.post(
         REGISTER_URL,
         JSON.stringify({ email: email, username: user, password: pwd }),
         {
-          headers: { 'Content-Type': 'application/json'},
-          withCredentials: true
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
         }
       );
       console.log(response.data);
       console.log(response.accessToken);
-      console.log(JSON.stringify(response))
+      console.log(JSON.stringify(response));
       setSuccess(true);
       // clear input fields
     } catch (err) {
       if (!err?.response) {
-        setErrMsg('No Server Response');
+        setErrMsg("No Server Response");
       } else if (err.response?.status === 409) {
-        setErrMsg('Username taken');
+        setErrMsg("Username taken");
       } else {
-        setErrMsg('Registration Failed')
+        setErrMsg("Registration Failed");
       }
       errRef.current.focus();
     }
@@ -182,10 +182,16 @@ function Register() {
               aria-invalid={validEmail ? "false" : "true"}
               aria-describedby="emailnote"
             />
-            <p id="emailnote" className={!validEmail && emailFocus ? "instructions" : "offscreen"}>
-              <FontAwesomeIcon icon={faInfoCircle}/>
+            <p
+              id="emailnote"
+              className={
+                !validEmail && emailFocus ? "instructions" : "offscreen"
+              }
+            >
+              <FontAwesomeIcon icon={faInfoCircle} />
               Email must contain 3 parts: <br />
-              Body content followed by @ followed by domain name (ex: google.com)
+              Body content followed by @ followed by domain name (ex:
+              google.com)
             </p>
 
             <label htmlFor="password">
@@ -250,7 +256,11 @@ function Register() {
               Must match the first password input field.
             </p>
             <button
-              disabled={!validName || !validEmail || !validPwd || !validMatch? true : false}
+              disabled={
+                !validName || !validEmail || !validPwd || !validMatch
+                  ? true
+                  : false
+              }
             >
               Sign up
             </button>
